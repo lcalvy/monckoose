@@ -4,6 +4,11 @@
   It provides a mocky database driver and a collection helper to make it easy to code any entity mocks.
   No database needed, no connection needed, just a js file with your entities.
 
+## Installation
+
+    $ npm install monckoose
+
+
 ## Usage
 
 First you need to put this line before any require of 'mongoose' :
