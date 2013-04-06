@@ -1,0 +1,37 @@
+{
+  "name": "monckoose",
+  "version": "0.0.1",
+  "description": "Mongoose mock solution",
+  "homepage": "https://github.com/openhoat/monckoose",
+  "main": "lib/monckoose.js",
+  "author": {
+    "name": "Olivier Penhoat",
+    "email": "openhoat@gmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/openhoat/monckoose.git"
+  },
+  "bugs": {
+    "url": "https://github.com/openhoat/monckoose/issues"
+  },
+  "licenses": [
+    {
+      "type": "EUPL",
+      "url": "https://github.com/openhoat/monckoose/blob/master/EUPL-1.1.txt"
+    }
+  ],
+  "engines": {
+    "node": "*"
+  },
+  "dependencies": {
+    "bson": "0.1.8",
+    "mongoose": "3.6.4"
+  },
+  "devDependencies": {
+    "grunt": "~0.4.1",
+    "grunt-contrib-clean": "~0.4.0",
+    "grunt-contrib-jasmine-node": "0.0.2",
+    "profess": "0.0.2"
+  }
+}
