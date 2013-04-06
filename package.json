@@ -1,7 +1,7 @@
 {
   "name": "monckoose",
   "version": "0.0.1",
-  "description": "Mongoose mock solution",
+  "description": "Mock your mongoose entities !",
   "homepage": "https://github.com/openhoat/monckoose",
   "main": "lib/monckoose.js",
   "author": {
