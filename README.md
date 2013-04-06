@@ -13,6 +13,7 @@ require('monckoose');
 ```
 
 Because it sets a global variable to tell mongoose to use the monckoose driver instead of the native one.
+
 Then add the mocks location to options :
 
 ```javascript
