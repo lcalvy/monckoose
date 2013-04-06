@@ -8,46 +8,46 @@
 First you need to put this line before any require of 'mongoose' :
 
 ```javascript
-    require('monckoose');
+  require('monckoose');
 ```
 
 Because it sets a global variable to tell mongoose to use the monckoose driver instead of the native one.
 Then add the mocks location to options :
 
 ```javascript
-    mongoose.connect('mongodb://localhost/mocks', { mocks: require(path.join(__dirname, 'myMocks')) });
+  mongoose.connect('mongodb://localhost/mocks', { mocks: require(path.join(__dirname, 'myMocks')) });
 ```
 
 Create a mocks module in myMocks.js, for example :
 
 ```javascript
-    var monckoose = require('monckoose')
-      , mocks, contacts;
+  var monckoose = require('monckoose')
+    , mocks, contacts;
 
-    contacts = [
-      { name: 'Robert', company: 'fake', email: 'robert@fake.net', _id: '51605fe1779ade6334000009', __v: 0 },
-      { name: 'Jennifer', company: 'fake', email: 'jennifer@fake.net', _id: '51605fe1779ade6334000004', __v: 0 }
-    ];
+  contacts = [
+    { name: 'Robert', company: 'fake', email: 'robert@fake.net', _id: '51605fe1779ade6334000009', __v: 0 },
+    { name: 'Jennifer', company: 'fake', email: 'jennifer@fake.net', _id: '51605fe1779ade6334000004', __v: 0 }
+  ];
 
-    mocks = {
-      contacts: new monckoose.MonckooseCollection(contacts)
-    };
+  mocks = {
+    contacts: new monckoose.MonckooseCollection(contacts)
+  };
 
-    module.exports = exports = mocks;
+  module.exports = exports = mocks;
 ```
 
 That's all! Now you can work as usual with mongoose, for example :
 
 ```javascript
-    var Contact = mongoose.model('Contact', {
-      name: String,
-      company: String,
-      email: String
-    });
-    var john = new Contact({ name: 'John', company: 'woo', email: 'john@woo.org' });
-    john.save(function (err) {
-      ...
-    });
+  var Contact = mongoose.model('Contact', {
+    name: String,
+    company: String,
+    email: String
+  });
+  var john = new Contact({ name: 'John', company: 'woo', email: 'john@woo.org' });
+  john.save(function (err) {
+    ...
+  });
 ```
 
 ## Limitations
