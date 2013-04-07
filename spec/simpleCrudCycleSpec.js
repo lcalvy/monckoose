@@ -5,16 +5,10 @@ require('../lib/monckoose');
 var path = require('path')
   , mongoose = require('mongoose')
   , Profess = require('profess')
-  , contactSchema;
-
-contactSchema = {
-  name: String,
-  company: String,
-  email: String
-};
+  , contactSchema = require('./contact-schema');
 
 describe('Monckoose simple crud cycle', function () {
-  var profess, completed, Contact, jennifer;
+  var profess, completed, Contact, jennifer, contactSize;
 
   beforeEach(function () {
     profess = new Profess({ verbose: false });
@@ -27,37 +21,50 @@ describe('Monckoose simple crud cycle', function () {
         mocks: require(path.join(__dirname, 'sample-mocks')),
         debug: false
       };
-      mongoose.connect('mongodb://localhost/mocks', dbOptions, function (err) {
-        expect(err).toBeFalsy();
-        Contact = mongoose.model('Contact', contactSchema);
-        completed = true;
-      });
+      profess
+        .do(function () {
+          if (mongoose.connection.readyState) {
+            profess.next();
+          } else {
+            mongoose.connect('mongodb://localhost/mocks', dbOptions, function (err) {
+              expect(err).toBeFalsy();
+              profess.next();
+            });
+          }
+        })
+        .then(function () {
+          expect(mongoose.connection.readyState).toBeTruthy();
+          Contact = mongoose.model('Contact', contactSchema);
+          expect(Contact).toBeTruthy();
+          completed = true;
+        });
     });
     waitsFor(function () {
       return completed;
     }, 1000);
   });
-  it('should return Robert and Jennifer', function () {
-    var robertFound, jenniferFound;
+  it('should return all the contacts including Robert, Jennifer and Michelle', function () {
+    var robertFound, jenniferFound, michelleFound;
     completed = false;
     robertFound = jenniferFound = false;
     runs(function () {
       Contact.find(function (err, contacts) {
-        if (err) {
-          console.error(err);
-          return;
-        }
+        expect(err).toBeFalsy();
         expect(contacts).toBeTruthy();
-        expect(contacts.length).toBe(2);
+        expect(contacts.length).toBeGreaterThan(0);
+        contactSize = contacts.length;
         contacts.forEach(function (contact) {
           if (contact.name === 'Robert') {
             robertFound = true;
           } else if (contact.name === 'Jennifer') {
             jenniferFound = true;
+          } else if (contact.name === 'Michelle') {
+            michelleFound = true;
           }
         });
         expect(robertFound).toBeTruthy();
         expect(jenniferFound).toBeTruthy();
+        expect(michelleFound).toBeTruthy();
         completed = true;
       });
     });
@@ -89,7 +96,8 @@ describe('Monckoose simple crud cycle', function () {
           Contact.find(function (err, contacts) {
             expect(err).toBeFalsy();
             expect(contacts).toBeTruthy();
-            expect(contacts.length).toBe(4);
+            contactSize += 2;
+            expect(contacts.length).toBe(contactSize);
             contacts.forEach(function (contact) {
               if (contact.name === 'John') {
                 johnFound = true;
@@ -112,11 +120,13 @@ describe('Monckoose simple crud cycle', function () {
     runs(function () {
       profess
         .do(function () {
-          Contact.findOne({ name: 'Jennifer', email: 'jennifer@fake.net' }, function (err, jennifer) {
+          Contact.findOne({ name: 'Jennifer', email: 'jennifer@fake.net' }, function (err, contact) {
             expect(err).toBeFalsy();
-            expect(jennifer).toBeTruthy();
-            expect(jennifer.name).toBe('Jennifer');
-            profess.next(jennifer);
+            expect(contact).toBeTruthy();
+            if (contact) {
+              expect(contact.name).toBe('Jennifer');
+            }
+            profess.next(contact);
           });
         })
         .then(function (jennifer) {
@@ -131,7 +141,8 @@ describe('Monckoose simple crud cycle', function () {
             robertFound = johnFound = timFound = false;
             expect(err).toBeFalsy();
             expect(contacts).toBeTruthy();
-            expect(contacts.length).toBe(3);
+            contactSize--;
+            expect(contacts.length).toBe(contactSize);
             contacts.forEach(function (contact) {
               if (contact.name === 'Robert') {
                 robertFound = true;
@@ -175,6 +186,19 @@ describe('Monckoose simple crud cycle', function () {
         expect(err).toBeFalsy();
         expect(contacts).toBeTruthy();
         expect(contacts.length).toBe(0);
+        completed = true;
+      });
+    });
+    waitsFor(function () {
+      return completed;
+    }, 1000);
+  });
+  it('should disconnect', function () {
+    completed = false;
+    runs(function () {
+      mongoose.disconnect(function (err) {
+        expect(err).toBeFalsy();
+        expect(mongoose.connection.readyState).toBeFalsy();
         completed = true;
       });
     });

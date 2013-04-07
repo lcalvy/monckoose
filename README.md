@@ -1,7 +1,7 @@
 ## What's monckoose?
 
   Monckoose helps you working with mongoose but without any database.
-  It provides a mocky database driver and a collection helper to make it easy to code any entity mocks.
+  It provides a fake driver and a collection helper to make it easy to code any entity mocks.
   No database needed, no connection needed, just a js file with your entities.
 
 ## Installation
@@ -59,8 +59,7 @@ john.save(function (err) {
 
 ## Limitations
 
-Currently available methods are limited to : find, findOne, insert and remove.
-An Error is thrown when other methods are invoked (contributions are welcome to complete MonckooseCollection.prototype).
+Currently available methods are limited to : find, findOne, insert, remove, save, update, findAndModify. Contributions are welcome to complete MonckooseCollection prototype.
 
 
 See unit tests in spec for more examples

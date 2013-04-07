@@ -1,6 +1,6 @@
 {
   "name": "monckoose",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Mock your mongoose entities !",
   "homepage": "https://github.com/openhoat/monckoose",
   "main": "lib/monckoose.js",
