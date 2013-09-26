@@ -1,5 +1,11 @@
 module.exports = exports = {
-  name: String,
+  name: {
+    type: String
+  },
   company: String,
-  email: String
+  email: {
+    type: String,
+    required: true,
+    unique: true
+  }
 };
